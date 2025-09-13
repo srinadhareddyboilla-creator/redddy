@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple ChatBot</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  #chat {
+    border: 1px solid #ccc;
+    height: 400px;
+    padding: 10px;
+    overflow-y: auto;
+    border-radius: 6px;
+    background: #f9f9f9;
+  }
+  .message {
+    margin: 8px 0;
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    display: inline-block;
+    clear: both;
+  }
+  .user {
+    background-color: #d0e8ff;
+    float: right;
+    text-align: right;
+  }
+  .bot {
+    background-color: #e2ffe2;
+    float: left;
+    text-align: left;
+  }
+  #input-container {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  #input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  #send-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #send-btn:hover {
+    background-color: #0056b3;
+  }
+  #buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  #buttons button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  #buttons button:hover {
+    background-color: #ddd;
+  }
+</style>
+</head>
+<body>
+
+<div id="chat"></div>
+
+<div id="buttons">
+  <button data-label="Class Schedule">📅 Class Schedule</button>
+  <button data-label="Dining">🍴 Dining</button>
+  <button data-label="Library">📚 Library</button>
+  <button data-label="Admin Help">🧾 Admin Help</button>
+</div>
+
+<div id="input-container">
+  <input id="input" type="text" placeholder="Type your message..." />
+  <button id="send-btn">Send</button>
+</div>
+
+<script>
+  const chat = document.getElementById('chat');
+  const input = document.getElementById('input');
+  const sendBtn = document.getElementById('send-btn');
+  const buttons = document.querySelectorAll('#buttons button');
+
+  // Append message to chat
+  function addMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    msgDiv.textContent = text;
+    chat.appendChild(msgDiv);
+    chat.scrollTop = chat.scrollHeight; // scroll to bottom
+  }
+
+  // Simulate bot response (replace this with real API call)
+  function getBotReply(message) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("You said: " + message);
+      }, 800);
+    });
+  }
+
+  // Send user message and get bot reply
+  async function sendMessage() {
+    const message = input.value.trim();
+    if (!message) return;
+    addMessage(message, 'user');
+    input.value = '';
+    const reply = await getBotReply(message);
+    addMessage(reply, 'bot');
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Fill input with button label on click
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      input.value = btn.getAttribute('data-label');
+      input.focus();
+    });
+  });
+</script>
+
+</body>
+</html>
